@@ -9,38 +9,8 @@ GaussianSolver::GaussianSolver(int n)
 
 void GaussianSolver::solve()
 {
-    const double EPS = 1e-10;
-
-    // Forward Elimination
-    for (int k = 0; k < rows - 1; k++)
-    {
-        if (fabs(data[k][k]) < EPS)
-            continue;
-
-        for (int i = k + 1; i < rows; i++)
-        {
-            double factor = data[i][k] / data[k][k];
-
-            for (int j = k; j < cols; j++)
-                data[i][j] -= factor * data[k][j];
-        }
-    }
-
-    // Backward Substitution
-    solution.assign(rows, 0);
-
-    for (int i = rows - 1; i >= 0; i--)
-    {
-        double sum = data[i][cols - 1];
-
-        for (int j = i + 1; j < rows; j++)
-            sum -= data[i][j] * solution[j];
-
-        if (fabs(data[i][i]) < EPS)
-            throw std::runtime_error("Division by zero");
-
-        solution[i] = sum / data[i][i];
-    }
+    gaussianElimination(true);
+    solution = backwardSubstitution();
 }
 // #include "../include/matrix.hpp"
 // #include <stdexcept>

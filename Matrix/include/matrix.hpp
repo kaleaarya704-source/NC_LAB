@@ -17,7 +17,7 @@ protected:
 public:
     Matrix(int r, int c);
     Matrix(const Matrix &other);
-    virtual ~Matrix();   // make virtual (important for inheritance)
+    virtual ~Matrix(); // make virtual (important for inheritance)
 
     // Keep your existing functions
     void readFromFile(const string &filename);
@@ -30,6 +30,9 @@ public:
 
     int getRows() const;
     int getCols() const;
+
+    void gaussianElimination(bool pivoting);
+    vector<double> backwardSubstitution() const;
 };
 
 #endif
