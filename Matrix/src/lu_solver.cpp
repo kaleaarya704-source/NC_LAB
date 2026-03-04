@@ -50,7 +50,30 @@ void LUSolver::backwardSubstitution(std::vector<std::vector<double>> &U,
         for (int j = i + 1; j < n; j++)
             sum -= U[i][j] * solution[j];
 
+        if (fabs(U[i][i]) < 1e-10)
+            throw runtime_error("Zero pivot during backward substitution");
         solution[i] = sum / U[i][i];
+    }
+}
+
+void LUSolver::pivotRows(int k)
+{
+    int maxRow = k;
+    double maxVal = fabs(data[k][k]);
+
+    for (int i = k + 1; i < rows; i++)
+    {
+        if (fabs(data[i][k]) > maxVal)
+        {
+            maxVal = fabs(data[i][k]);
+            maxRow = i;
+        }
+    }
+
+    if (maxRow != k)
+    {
+        for (int j = 0; j < cols; j++)
+            std::swap(data[k][j], data[maxRow][j]);
     }
 }
 
@@ -64,6 +87,7 @@ void LUSolver::croutDecomposition()
 
     for (int j = 0; j < n; j++)
     {
+        pivotRows(j);
         U[j][j] = 1;
 
         for (int i = j; i < n; i++)
@@ -102,6 +126,7 @@ void LUSolver::doolittleDecomposition()
 
     for (int i = 0; i < n; i++)
     {
+        pivotRows(i);
         L[i][i] = 1;
 
         for (int j = i; j < n; j++)
@@ -118,6 +143,9 @@ void LUSolver::doolittleDecomposition()
             double sum = 0;
             for (int k = 0; k < i; k++)
                 sum += L[j][k] * U[k][i];
+
+            if (fabs(U[i][i]) < 1e-10)
+                throw runtime_error("Zero pivot in Doolittle decomposition");
 
             L[j][i] = (data[j][i] - sum) / U[i][i];
         }
@@ -144,7 +172,14 @@ void LUSolver::choleskyDecomposition()
                 sum += L[i][k] * L[j][k];
 
             if (i == j)
-                L[i][j] = sqrt(data[i][i] - sum);
+            {
+                double val = data[i][i] - sum;
+
+                if (val <= 0)
+                    throw runtime_error("Matrix not positive definite");
+
+                L[i][j] = sqrt(val);
+            }
             else
                 L[i][j] = (data[i][j] - sum) / L[j][j];
         }

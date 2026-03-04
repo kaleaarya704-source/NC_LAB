@@ -12,6 +12,42 @@ void GaussianSolver::solve()
     gaussianElimination(true);
     solution = backwardSubstitution();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // #include "../include/matrix.hpp"
 // #include <stdexcept>
 // #include <cmath>

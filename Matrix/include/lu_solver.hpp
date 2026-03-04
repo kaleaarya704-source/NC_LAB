@@ -26,10 +26,11 @@ private:
     void doolittleDecomposition();
     void choleskyDecomposition();
 
-void forwardSubstitution(std::vector<std::vector<double>> &L,
-                         std::vector<double> &y);
-void backwardSubstitution(std::vector<std::vector<double>> &U,
-                          std::vector<double> &y);
+    void forwardSubstitution(std::vector<std::vector<double>> &L,
+                             std::vector<double> &y);
+    void backwardSubstitution(std::vector<std::vector<double>> &U,
+                              std::vector<double> &y);
+    void pivotRows(int k);
 };
 
 #endif

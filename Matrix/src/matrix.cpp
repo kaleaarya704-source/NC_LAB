@@ -92,6 +92,15 @@ Matrix Matrix::subtract(const Matrix &other) const
     return result;
 }
 
+Matrix Matrix::operator+(const Matrix &other) const
+{
+    return add(other); // reuse existing function
+}
+
+Matrix Matrix::operator-(const Matrix &other) const
+{
+    return subtract(other); // reuse existing function
+}
 
 void Matrix::gaussianElimination(bool pivoting)
 {
@@ -114,7 +123,7 @@ void Matrix::gaussianElimination(bool pivoting)
             }
 
             if (maxVal < EPS)
-                continue;  //avoid division by zero
+                throw runtime_error("Singular matrix");
 
             if (maxRow != k)
             {
@@ -122,17 +131,12 @@ void Matrix::gaussianElimination(bool pivoting)
                     swap(data[k][j], data[maxRow][j]);
             }
         }
-        else
-        {
-            if (fabs(data[k][k]) < EPS)
-                continue;
-        }
+
+        if (fabs(data[k][k]) < EPS)
+            throw runtime_error("Zero pivot encountered");
 
         for (int i = k + 1; i < rows; i++)
         {
-            if (fabs(data[k][k]) < EPS)
-                continue;
-
             double factor = data[i][k] / data[k][k];
 
             for (int j = k; j < cols; j++)
@@ -140,6 +144,7 @@ void Matrix::gaussianElimination(bool pivoting)
         }
     }
 }
+
 
 vector<double> Matrix::backwardSubstitution() const
 {

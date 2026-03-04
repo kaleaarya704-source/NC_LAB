@@ -26,6 +26,10 @@ public:
     Matrix add(const Matrix &other) const;
     Matrix subtract(const Matrix &other) const;
 
+    // Operator Overloading
+    Matrix operator+(const Matrix &other) const;
+    Matrix operator-(const Matrix &other) const;
+
     void display() const;
 
     int getRows() const;

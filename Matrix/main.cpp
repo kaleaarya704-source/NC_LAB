@@ -9,7 +9,7 @@ int main()
 {
     try
     {
-        int n = 225;
+        int n = 49;
         int choice;
 
         cout << "Choose Method:\n";
