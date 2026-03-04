@@ -4,9 +4,9 @@ using namespace std;
 
 int main()
 {
-    ifstream x("output1.txt");
-    ifstream b("225right.txt");
-    ofstream out("combined1.txt");
+    ifstream x("output.txt");
+    ifstream b("49r.txt");
+    ofstream out("combined.txt");
 
     double xv, bv;
 

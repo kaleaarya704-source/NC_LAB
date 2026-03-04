@@ -25,6 +25,11 @@ private:
     void croutDecomposition();
     void doolittleDecomposition();
     void choleskyDecomposition();
+
+void forwardSubstitution(std::vector<std::vector<double>> &L,
+                         std::vector<double> &y);
+void backwardSubstitution(std::vector<std::vector<double>> &U,
+                          std::vector<double> &y);
 };
 
 #endif

@@ -1,4 +1,5 @@
 #include "gaussian_solver.hpp"
+#include "lu_solver.hpp"
 #include <iostream>
 #include <fstream>
 
@@ -9,26 +10,57 @@ int main()
     try
     {
         int n = 225;
+        int choice;
 
-        // Base class pointer → Runtime Polymorphism
-        SystemOfLinearEquation* solver = new GaussianSolver(n);
+        cout << "Choose Method:\n";
+        cout << "1. Gaussian Elimination\n";
+        cout << "2. LU - Crout\n";
+        cout << "3. LU - Doolittle\n";
+        cout << "4. LU - Cholesky\n";
+        cout << "Enter choice: ";
+        cin >> choice;
 
-        solver->readFromFile("input1.txt");
+        SystemOfLinearEquation *solver = nullptr;
 
-        solver->solve();   // no bool parameter anymore
+        if (choice == 1)
+        {
+            solver = new GaussianSolver(n);
+        }
+        else if (choice == 2)
+        {
+            solver = new LUSolver(n, LUSolver::CROUT);
+        }
+        else if (choice == 3)
+        {
+            solver = new LUSolver(n, LUSolver::DOOLITTLE);
+        }
+        else if (choice == 4)
+        {
+            solver = new LUSolver(n, LUSolver::CHOLESKY);
+        }
+        else
+        {
+            cout << "Invalid choice\n";
+            return 0;
+        }
+
+        solver->readFromFile("input.txt");
+
+        solver->solve();
 
         auto solution = solver->getSolution();
 
-        ofstream out("output1.txt");
+        ofstream out("output.txt");
 
-        for (double val : solution)
-            out << val << endl;
-
+        for (int i = 0; i < solution.size(); i++)
+        {
+            out << "x" << i + 1 << " = " << solution[i] << endl;
+        }
         out.close();
 
         delete solver;
 
-        cout << "Solution written to output1.txt\n";
+        cout << "Solution written to output.txt\n";
     }
     catch (exception &e)
     {
@@ -41,3 +73,168 @@ int main()
 
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #include "gaussian_solver.hpp"
+// #include "lu_solver.hpp"
+// #include <iostream>
+// #include <fstream>
+
+// using namespace std;
+
+// int main()
+// {
+//     try
+//     {
+//         int n = 225;
+
+//         // Base class pointer → Runtime Polymorphism
+//         SystemOfLinearEquation* solver = new GaussianSolver(n);
+
+//         solver->readFromFile("input1.txt");
+
+//         solver->solve();   // no bool parameter anymore
+
+//         auto solution = solver->getSolution();
+
+//         ofstream out("output1.txt");
+
+//         for (double val : solution)
+//             out << val << endl;
+
+//         out.close();
+
+//         delete solver;
+
+//         cout << "Solution written to output1.txt\n";
+//     }
+//     catch (exception &e)
+//     {
+//         cout << "Error: " << e.what() << endl;
+
+//         ofstream out("output.txt");
+//         out << "Computation failed.\n";
+//         out.close();
+//     }
+
+//     return 0;
+// }

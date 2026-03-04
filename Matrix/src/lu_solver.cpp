@@ -13,8 +13,45 @@ void LUSolver::solve()
         croutDecomposition();
     else if (method == DOOLITTLE)
         doolittleDecomposition();
-    else if (method == CHOLESKY)
+    else
         choleskyDecomposition();
+}
+
+void LUSolver::forwardSubstitution(std::vector<std::vector<double>> &L,
+                                   std::vector<double> &y)
+{
+    int n = rows;
+    std::vector<double> b(n);
+
+    for (int i = 0; i < n; i++)
+        b[i] = data[i][cols - 1];
+
+    for (int i = 0; i < n; i++)
+    {
+        double sum = b[i];
+
+        for (int j = 0; j < i; j++)
+            sum -= L[i][j] * y[j];
+
+        y[i] = sum / L[i][i];
+    }
+}
+
+void LUSolver::backwardSubstitution(std::vector<std::vector<double>> &U,
+                                    std::vector<double> &y)
+{
+    int n = rows;
+    solution.assign(n, 0);
+
+    for (int i = n - 1; i >= 0; i--)
+    {
+        double sum = y[i];
+
+        for (int j = i + 1; j < n; j++)
+            sum -= U[i][j] * solution[j];
+
+        solution[i] = sum / U[i][i];
+    }
 }
 
 void LUSolver::croutDecomposition()
@@ -23,6 +60,7 @@ void LUSolver::croutDecomposition()
 
     std::vector<std::vector<double>> L(n, std::vector<double>(n, 0));
     std::vector<std::vector<double>> U(n, std::vector<double>(n, 0));
+    std::vector<double> y(n);
 
     for (int j = 0; j < n; j++)
     {
@@ -43,11 +81,15 @@ void LUSolver::croutDecomposition()
             for (int k = 0; k < j; k++)
                 sum += L[j][k] * U[k][i];
 
+            if (fabs(L[j][j]) < 1e-10)
+                throw runtime_error("Zero pivot in LU decomposition");
+
             U[j][i] = (data[j][i] - sum) / L[j][j];
         }
     }
 
-    // You can add forward/back substitution here to compute solution
+    forwardSubstitution(L, y);
+    backwardSubstitution(U, y);
 }
 
 void LUSolver::doolittleDecomposition()
@@ -56,6 +98,7 @@ void LUSolver::doolittleDecomposition()
 
     std::vector<std::vector<double>> L(n, std::vector<double>(n, 0));
     std::vector<std::vector<double>> U(n, std::vector<double>(n, 0));
+    std::vector<double> y(n);
 
     for (int i = 0; i < n; i++)
     {
@@ -79,6 +122,9 @@ void LUSolver::doolittleDecomposition()
             L[j][i] = (data[j][i] - sum) / U[i][i];
         }
     }
+
+    forwardSubstitution(L, y);
+    backwardSubstitution(U, y);
 }
 
 void LUSolver::choleskyDecomposition()
@@ -86,6 +132,7 @@ void LUSolver::choleskyDecomposition()
     int n = rows;
 
     std::vector<std::vector<double>> L(n, std::vector<double>(n, 0));
+    std::vector<double> y(n);
 
     for (int i = 0; i < n; i++)
     {
@@ -102,4 +149,13 @@ void LUSolver::choleskyDecomposition()
                 L[i][j] = (data[i][j] - sum) / L[j][j];
         }
     }
+
+    std::vector<std::vector<double>> U = L;
+
+    for (int i = 0; i < n; i++)
+        for (int j = i + 1; j < n; j++)
+            U[i][j] = L[j][i];
+
+    forwardSubstitution(L, y);
+    backwardSubstitution(U, y);
 }
