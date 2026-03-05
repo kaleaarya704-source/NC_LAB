@@ -35,8 +35,8 @@ public:
     int getRows() const;
     int getCols() const;
 
-    void gaussianElimination(bool pivoting);
-    vector<double> backwardSubstitution() const;
+    void gaussianElimination(bool pivoting); //Transforms matrix into upper triangular form.
+    vector<double> backwardSubstitution() const; //Solves triangular matrix.
 };
 
 #endif

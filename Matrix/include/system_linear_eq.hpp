@@ -4,7 +4,7 @@
 #include "matrix.hpp"
 #include <vector>
 
-class SystemOfLinearEquation : public Matrix
+class SystemOfLinearEquation : public Matrix //This is class inherited from Matrix.
 {
 protected:
     std::vector<double> solution;

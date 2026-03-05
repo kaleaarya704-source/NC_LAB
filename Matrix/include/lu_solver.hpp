@@ -17,9 +17,9 @@ private:
     Method method;
 
 public:
-    LUSolver(int n, Method m);
+    LUSolver(int n, Method m);//Constructor initializes base class and stores selected method.
 
-    void solve() override;
+    void solve() override; //overrides virtual function solve from base class
 
 private:
     void croutDecomposition();
@@ -27,10 +27,10 @@ private:
     void choleskyDecomposition();
 
     void forwardSubstitution(std::vector<std::vector<double>> &L,
-                             std::vector<double> &y);
+                             std::vector<double> &y);//solves Ly = b
     void backwardSubstitution(std::vector<std::vector<double>> &U,
-                              std::vector<double> &y);
-    void pivotRows(int k);
+                              std::vector<double> &y);//solves Ux = y
+    void pivotRows(int k);//performs partial pivoting on column k
 };
 
 #endif

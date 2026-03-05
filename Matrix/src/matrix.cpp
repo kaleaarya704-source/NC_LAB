@@ -10,9 +10,9 @@ Matrix::Matrix(int r, int c)
     rows = r;
     cols = c;
 
-    data = new double *[rows];
+    data = new double *[rows];//Creates array of row pointers.
     for (int i = 0; i < rows; i++)
-        data[i] = new double[cols];
+        data[i] = new double[cols];//Creates each row.
 }
 
 Matrix::Matrix(const Matrix &other)

@@ -20,7 +20,7 @@ int main()
         cout << "Enter choice: ";
         cin >> choice;
 
-        SystemOfLinearEquation *solver = nullptr;
+        SystemOfLinearEquation *solver = nullptr;//solver base class ka pointer but it will store obj of derived class (GaussianSolver or LUSolver) at runtime (runtime polymorphism achieved)
 
         if (choice == 1)
         {
