@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cmath>
 #include "RootFinding.hpp"
-#include "matrix.hpp"
 
 using namespace std;
 
@@ -29,28 +28,6 @@ int main()
 
     for (int i = 0; i < 3; i++)
         delete methods[i];
-
-    // Matrix
-    try
-    {
-        int r, c;
-
-        cout << "\nEnter rows and columns for matrices : ";
-        cin >> r >> c;
-
-        Matrix A(r, c);
-        Matrix B(r, c);
-
-        cout << "\nEnter Matrix A \n";
-        A.readFromFile("input1.txt");
-
-        cout << " \nEnter Matrix B \n";
-        B.readFromFile("input2.txt");
-    }
-    catch (const std::exception &e)
-    {
-        std::cerr << e.what() << '\n';
-    }
 
     return 0;
 }
