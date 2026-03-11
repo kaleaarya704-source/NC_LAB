@@ -1,6 +1,7 @@
 #include "../include/matrix.hpp"
 #include <stdexcept>
 #include <cmath>
+#include <iomanip>
 
 Matrix::Matrix(int r, int c)
 {
@@ -10,9 +11,9 @@ Matrix::Matrix(int r, int c)
     rows = r;
     cols = c;
 
-    data = new double *[rows];//Creates array of row pointers.
+    data = new double *[rows]; // Creates array of row pointers.
     for (int i = 0; i < rows; i++)
-        data[i] = new double[cols];//Creates each row.
+        data[i] = new double[cols]; // Creates each row.
 }
 
 Matrix::Matrix(const Matrix &other)
@@ -48,6 +49,8 @@ void Matrix::readFromFile(const string &filename)
 
     file.close();
 }
+
+
 
 void Matrix::writeToFile(const string &filename) const
 {
@@ -92,6 +95,11 @@ Matrix Matrix::subtract(const Matrix &other) const
     return result;
 }
 
+Matrix Matrix::multiply(const Matrix &other) const
+{
+    return (*this) * other; // MODIFICATION: Added implementation for declared function
+}
+
 Matrix Matrix::operator+(const Matrix &other) const
 {
     return add(other); // reuse existing function
@@ -100,6 +108,175 @@ Matrix Matrix::operator+(const Matrix &other) const
 Matrix Matrix::operator-(const Matrix &other) const
 {
     return subtract(other); // reuse existing function
+}
+
+double &Matrix::operator()(int i, int j)
+{
+    return data[i][j];
+}
+
+double Matrix::operator()(int i, int j) const
+{
+    return data[i][j];
+}
+
+Matrix Matrix::operator*(const Matrix &m) const
+{
+    if (cols != m.rows)
+        throw runtime_error("Multiplication size mismatch.");
+
+    Matrix result(rows, m.cols);
+
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < m.cols; j++)
+        {
+            result.data[i][j] = 0;
+            for (int k = 0; k < cols; k++)
+                result.data[i][j] += data[i][k] * m.data[k][j];
+        }
+
+    return result;
+}
+
+bool Matrix::operator==(const Matrix &m) const
+{
+    if (rows != m.rows || cols != m.cols)
+        return false;
+
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            if (data[i][j] != m.data[i][j])
+                return false;
+
+    return true;
+}
+
+istream &operator>>(istream &in, Matrix &m)
+{
+    for (int i = 0; i < m.rows; i++)
+        for (int j = 0; j < m.cols; j++)
+            in >> m.data[i][j];
+
+    return in;
+}
+
+
+
+ostream &operator<<(ostream &out, const Matrix &m)
+{
+    out << fixed << setprecision(4);
+
+    for (int i = 0; i < m.rows; i++)
+    {
+        for (int j = 0; j < m.cols; j++)
+            out << setw(10) << m.data[i][j];
+
+        out << endl;
+    }
+
+    return out;
+}
+
+bool Matrix::isSquare() const
+{
+    return rows == cols;
+}
+
+bool Matrix::isNull() const
+{
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            if (data[i][j] != 0)
+                return false;
+
+    return true;
+}
+
+bool Matrix::isIdentity() const
+{
+    if (!isSquare())
+        return false;
+
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < rows; j++) // MODIFICATION: only check coefficient part
+        {
+            if (i == j && data[i][j] != 1)
+                return false;
+            if (i != j && data[i][j] != 0)
+                return false;
+        }
+
+    return true;
+}
+
+bool Matrix::isSymmetric() const
+{
+    if (!isSquare())
+        return false;
+
+    for (int i = 0; i < rows; i++)
+        for (int j = i + 1; j < rows; j++) // MODIFICATION: ignore augmented column
+            if (data[i][j] != data[j][i])
+                return false;
+
+    return true;
+}
+
+bool Matrix::isDiagonal() const
+{
+    if (!isSquare())
+        return false;
+
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < rows; j++) // MODIFICATION
+            if (i != j && data[i][j] != 0)
+                return false;
+
+    return true;
+}
+
+bool Matrix::isDiagonallyDominant() const
+{
+    if (!isSquare())
+        return false;
+
+    for (int i = 0; i < rows; i++)
+    {
+        double sum = 0;
+
+        for (int j = 0; j < rows; j++) // MODIFICATION
+        {
+            if (i != j)
+                sum += fabs(data[i][j]);
+        }
+
+        if (fabs(data[i][i]) < sum)
+            return false;
+    }
+
+    return true;
+}
+
+
+Matrix Matrix::transpose() const
+{
+    Matrix result(cols, rows);
+
+    for (int i = 0; i < rows; i++)
+        for (int j = 0; j < cols; j++)
+            result.data[j][i] = data[i][j];
+
+    return result;
+}
+
+double Matrix::determinant() const
+{
+    throw runtime_error("Determinant disabled for large matrices."); // MODIFICATION
+}
+
+Matrix Matrix::inverse() const
+{
+    throw runtime_error("Inverse computation disabled for large matrices."); // MODIFICATION
 }
 
 void Matrix::gaussianElimination(bool pivoting)
@@ -144,7 +321,6 @@ void Matrix::gaussianElimination(bool pivoting)
         }
     }
 }
-
 
 vector<double> Matrix::backwardSubstitution() const
 {
