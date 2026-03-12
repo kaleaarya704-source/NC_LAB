@@ -3,6 +3,13 @@
 #include <cmath>
 #include <iomanip>
 
+Matrix::Matrix()
+{
+    rows = 0;
+    cols = 0;
+    data = nullptr;
+}
+
 Matrix::Matrix(int r, int c)
 {
     if (r <= 0 || c <= 0)
@@ -97,7 +104,7 @@ Matrix Matrix::subtract(const Matrix &other) const
 
 Matrix Matrix::multiply(const Matrix &other) const
 {
-    return (*this) * other; // MODIFICATION: Added implementation for declared function
+    return (*this) * other;
 }
 
 Matrix Matrix::operator+(const Matrix &other) const
@@ -110,12 +117,12 @@ Matrix Matrix::operator-(const Matrix &other) const
     return subtract(other); // reuse existing function
 }
 
-double &Matrix::operator()(int i, int j)
+double &Matrix::operator()(int i, int j)//Returns reference to matrix element
 {
     return data[i][j];
 }
 
-double Matrix::operator()(int i, int j) const
+double Matrix::operator()(int i, int j) const//Used when matrix cannot be modified
 {
     return data[i][j];
 }
@@ -160,8 +167,6 @@ istream &operator>>(istream &in, Matrix &m)
     return in;
 }
 
-
-
 ostream &operator<<(ostream &out, const Matrix &m)
 {
     out << fixed << setprecision(4);
@@ -198,7 +203,7 @@ bool Matrix::isIdentity() const
         return false;
 
     for (int i = 0; i < rows; i++)
-        for (int j = 0; j < rows; j++) // MODIFICATION: only check coefficient part
+        for (int j = 0; j < rows; j++) //only check coefficient part
         {
             if (i == j && data[i][j] != 1)
                 return false;
@@ -215,7 +220,7 @@ bool Matrix::isSymmetric() const
         return false;
 
     for (int i = 0; i < rows; i++)
-        for (int j = i + 1; j < rows; j++) // MODIFICATION: ignore augmented column
+        for (int j = i + 1; j < rows; j++) //ignore augmented column
             if (data[i][j] != data[j][i])
                 return false;
 
@@ -228,7 +233,7 @@ bool Matrix::isDiagonal() const
         return false;
 
     for (int i = 0; i < rows; i++)
-        for (int j = 0; j < rows; j++) // MODIFICATION
+        for (int j = 0; j < rows; j++) 
             if (i != j && data[i][j] != 0)
                 return false;
 
@@ -244,7 +249,7 @@ bool Matrix::isDiagonallyDominant() const
     {
         double sum = 0;
 
-        for (int j = 0; j < rows; j++) // MODIFICATION
+        for (int j = 0; j < rows; j++) 
         {
             if (i != j)
                 sum += fabs(data[i][j]);
@@ -271,12 +276,12 @@ Matrix Matrix::transpose() const
 
 double Matrix::determinant() const
 {
-    throw runtime_error("Determinant disabled for large matrices."); // MODIFICATION
+    throw runtime_error("Determinant disabled for large matrices.");
 }
 
 Matrix Matrix::inverse() const
 {
-    throw runtime_error("Inverse computation disabled for large matrices."); // MODIFICATION
+    throw runtime_error("Inverse computation disabled for large matrices.");
 }
 
 void Matrix::gaussianElimination(bool pivoting)

@@ -29,7 +29,7 @@ $(SHARED_LIB): $(OBJ)
 
 # Build executable with static library
 matrix_static: main.cpp $(STATIC_LIB)
-	$(CXX) $(CXXFLAGS) main.cpp -L. -lmatrix -o matrix_static
+	$(CXX) $(CXXFLAGS) main.cpp libmatrix.a -o matrix_static
 
 # Build executable with dynamic library
 matrix_dynamic: main.cpp $(SHARED_LIB)

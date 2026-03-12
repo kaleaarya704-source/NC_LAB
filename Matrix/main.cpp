@@ -1,6 +1,6 @@
 #include "gaussian_solver.hpp"
 #include "lu_solver.hpp"
-#include "matrix.hpp" // MODIFICATION: needed to create temporary matrix
+#include "matrix.hpp" 
 #include <iostream>
 #include <fstream>
 
@@ -13,14 +13,12 @@ int main()
         int n = 49; // size of system
         int choice;
 
-        // MODIFICATION: create temporary matrix to read and check properties
-        Matrix augmented(n, n + 1);
+        Matrix augmented(n, n + 1);//create augmented matrix
         augmented.readFromFile("input.txt");
 
-        // extract coefficient matrix
-        Matrix A(n, n);
+        Matrix A(n, n);//create coefficient matrix
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++)//copies coefficient part to A for property checks
             for (int j = 0; j < n; j++)
                 A(i, j) = augmented(i, j);
 
@@ -31,10 +29,7 @@ int main()
         cout << "Is Identity: " << (A.isIdentity() ? "Yes" : "No") << endl;
         cout << "Is Null: " << (A.isNull() ? "Yes" : "No") << endl;
         cout << "Is Diagonal: " << (A.isDiagonal() ? "Yes" : "No") << endl;
-        cout << "Is Diagonally Dominant: "
-             << (A.isDiagonallyDominant() ? "Yes" : "No") << endl;
-
-        // MODIFICATION: removed determinant and inverse (not feasible for large matrices)
+        cout << "Is Diagonally Dominant: " << (A.isDiagonallyDominant() ? "Yes" : "No") << endl;
 
         cout << "\nChoose Method:\n";
         cout << "1. Gaussian Elimination\n";
@@ -45,7 +40,7 @@ int main()
 
         cin >> choice;
 
-        SystemOfLinearEquation *solver = nullptr;
+        SystemOfLinearEquation *solver = nullptr;//pointer to base class for polymorphism
 
         if (choice == 1)
         {
@@ -69,17 +64,15 @@ int main()
             return 0;
         }
 
-        // MODIFICATION: read matrix into solver AFTER creation
-        solver->readFromFile("input.txt");
+        solver->readFromFile("input.txt");//loads augmented matrix into solver object
 
-        solver->solve();
+        solver->solve();//this will execute selected method
 
-        auto solution = solver->getSolution();
+        auto solution = solver->getSolution();//store output
 
-        // MODIFICATION: write solution only to file
         ofstream out("output.txt");
 
-        for (int i = 0; i < solution.size(); i++)
+        for (int i = 0; i < solution.size(); i++)//write solution to file
         {
             out << "x" << i + 1 << " = " << solution[i] << endl;
         }
