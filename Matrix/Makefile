@@ -3,7 +3,7 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Iinclude
 
 # Source files
-SRC = src/matrix.cpp src/gaussian_solver.cpp src/lu_solver.cpp src/system_linear_eq.cpp
+SRC = src/matrix.cpp src/gaussian_solver.cpp src/lu_solver.cpp src/system_linear_eq.cpp  src/iterative_solver.cpp
 
 # Object files
 OBJ = $(SRC:.cpp=.o)

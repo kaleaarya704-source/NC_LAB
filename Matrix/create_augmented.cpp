@@ -6,9 +6,9 @@ using namespace std;
 
 int main()
 {
-    ifstream left("49l.txt");
-    ifstream right("49r.txt");
-    ofstream out("input.txt");
+    ifstream left("225left.txt");
+    ifstream right("225right.txt");
+    ofstream out("input1.txt");
 
     if (!left || !right || !out)
     {

@@ -1,6 +1,9 @@
 #include "lu_solver.hpp"
 #include <cmath>
 #include <stdexcept>
+#include <vector>
+
+using namespace std;
 
 LUSolver::LUSolver(int n, Method m)
     : SystemOfLinearEquation(n), method(m) //Calls parent constructor,Stores selected method.
@@ -51,7 +54,7 @@ void LUSolver::backwardSubstitution(std::vector<std::vector<double>> &U,
             sum -= U[i][j] * solution[j];//Subtract known values
 
         if (fabs(U[i][i]) < 1e-10)
-            throw runtime_error("Zero pivot during backward substitution");
+            throw std::runtime_error("Zero pivot during backward substitution");
         solution[i] = sum / U[i][i];
     }
 }
@@ -107,7 +110,7 @@ void LUSolver::croutDecomposition()
                 sum += L[j][k] * U[k][i];//compute lower triangular part
 
             if (fabs(L[j][j]) < 1e-10)
-                throw runtime_error("Zero pivot in LU decomposition");
+                throw std::runtime_error("Zero pivot in LU decomposition");
 
             U[j][i] = (data[j][i] - sum) / L[j][j];//compute upper triangular part
         }
@@ -146,7 +149,7 @@ void LUSolver::doolittleDecomposition()
                 sum += L[j][k] * U[k][i];//compute lower triangular part
 
             if (fabs(U[i][i]) < 1e-10)
-                throw runtime_error("Zero pivot in Doolittle decomposition");
+                throw std::runtime_error("Zero pivot in Doolittle decomposition");
 
             L[j][i] = (data[j][i] - sum) / U[i][i];//compute L[j][i]
         }
@@ -177,7 +180,7 @@ void LUSolver::choleskyDecomposition()
                 double val = data[i][i] - sum;//compute value for L[i][i]
 
                 if (val <= 0)
-                    throw runtime_error("Matrix not positive definite");
+                    throw std::runtime_error("Matrix not positive definite");
 
                 L[i][j] = sqrt(val);//compute L[i][i]
             }

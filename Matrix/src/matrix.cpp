@@ -2,12 +2,22 @@
 #include <stdexcept>
 #include <cmath>
 #include <iomanip>
-
+using namespace std;
 Matrix::Matrix()
 {
     rows = 0;
     cols = 0;
     data = nullptr;
+}
+
+int Matrix::getRows() const
+{
+    return rows;
+}
+
+int Matrix::getCols() const
+{
+    return cols;
 }
 
 Matrix::Matrix(int r, int c)
@@ -44,7 +54,7 @@ Matrix::~Matrix()
     delete[] data;
 }
 
-void Matrix::readFromFile(const string &filename)
+void Matrix::readFromFile(const std::string &filename)
 {
     ifstream file(filename);
     if (!file)
@@ -59,7 +69,7 @@ void Matrix::readFromFile(const string &filename)
 
 
 
-void Matrix::writeToFile(const string &filename) const
+void Matrix::writeToFile(const std::string &filename) const
 {
     ofstream file(filename);
     if (!file)
@@ -327,7 +337,7 @@ void Matrix::gaussianElimination(bool pivoting)
     }
 }
 
-vector<double> Matrix::backwardSubstitution() const
+std::vector<double> Matrix::backwardSubstitution() const
 {
     const double EPS = 1e-10;
 
