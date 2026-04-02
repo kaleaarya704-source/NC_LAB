@@ -69,7 +69,7 @@ int main()
             // Extract b vector
             vector<double> b(n);
             for (int i = 0; i < n; i++)
-                b[i] = augmented(i, n);
+                b[i] = augmented(i, n);//iterative methods need a nad b separately
 
             // Check diagonal dominance
             if (!IterativeSolver::isDiagonallyDominant(A))
