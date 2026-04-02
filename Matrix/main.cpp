@@ -96,9 +96,12 @@ int main()
             return 0;
         }
 
-        solver->readFromFile("input1.txt");//loads augmented matrix into solver object
+        if (solver != nullptr)
+        {
+            solver->readFromFile("input1.txt");//loads augmented matrix into solver object
+            solver->solve();//this will execute selected method
 
-        solver->solve();//this will execute selected method
+        }
 
         ofstream out("output1.txt");
 
