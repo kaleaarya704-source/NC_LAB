@@ -1,4 +1,4 @@
-#include "lu_solver.hpp"
+#include "../include/lu_solver.hpp"
 #include <cmath>
 #include <stdexcept>
 #include <vector>

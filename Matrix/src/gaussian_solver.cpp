@@ -1,4 +1,4 @@
-#include "gaussian_solver.hpp"
+#include "../include/gaussian_solver.hpp"
 #include <cmath>
 #include <stdexcept>
 

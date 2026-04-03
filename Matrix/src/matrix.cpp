@@ -49,9 +49,13 @@ Matrix::Matrix(const Matrix &other)
 
 Matrix::~Matrix()
 {
-    for (int i = 0; i < rows; i++)
-        delete[] data[i];
-    delete[] data;
+    if (data != nullptr)
+    {
+        for (int i = 0; i < rows; i++)
+            delete[] data[i];
+        delete[] data;
+        data = nullptr;
+    }
 }
 
 void Matrix::readFromFile(const std::string &filename)

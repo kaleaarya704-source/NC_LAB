@@ -1,4 +1,4 @@
-#include "system_linear_eq.hpp"
+#include "../include/system_linear_eq.hpp"
 
 
 SystemOfLinearEquation::SystemOfLinearEquation(int n)
